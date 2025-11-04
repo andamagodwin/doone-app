@@ -18,6 +18,28 @@ Doone is built on the philosophy that productivity tools should be beautiful, fa
 * **Smart Task Capture (Future):** Built with Natural Language Processing (NLP) in mind to parse dates and times directly from your typed text.
 * **Predictive Prioritization (Future):** AI-driven suggestions for your next most important task, based on your habits and due dates.
 
+## App Color Palettes
+<p align="center">
+  <img src="https://fra.cloud.appwrite.io/v1/storage/buckets/690905c400367db1d89a/files/69091448002070b8712f/view?project=68321d04002597a140d0&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbklkIjoiNjkwOTE0NjIwZDE2ZGY3YWRiNjkiLCJyZXNvdXJjZUlkIjoiNjkwOTA1YzQwMDM2N2RiMWQ4OWE6NjkwOTE0NDgwMDIwNzBiODcxMmYiLCJyZXNvdXJjZVR5cGUiOiJmaWxlcyIsInJlc291cmNlSW50ZXJuYWxJZCI6IjQ3MzAzOjIiLCJpYXQiOjE3NjIyMDI3MjV9.RFHz15iAUgDXwaICpTe8RGi38oPay0PgiFmNWCnbbh4" alt="Doone Mascot Logo - Simple Done" width="680"/>
+</p>
+
+### Brand Color Palette
+
+Our design system utilizes a carefully curated color palette to maintain consistency across the application.
+
+**Quick Copy:**
+```css
+/* Color Palette */
+--primary: #36cf94;
+--secondary: #0e4198;
+--accent: #2395a7;
+--success: #2eb39e;
+--info: #1766a4;
+--link: #1d85ac;
+--highlight: #28a4a2;
+--focus: #165caf;
+```
+
 ## Tech Stack & Architecture
 
 This repository contains the source code for the **Doone** Android application.

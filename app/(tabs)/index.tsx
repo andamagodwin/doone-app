@@ -1,23 +1,20 @@
-import { Stack } from 'expo-router';
+import { ScrollView } from 'react-native';
+import {
+  CustomText,
+  CustomView,
+} from '~/components/Atoms';
 
-import { StyleSheet, View } from 'react-native';
-
-import { ScreenContent } from '~/components/ScreenContent';
 
 export default function Home() {
+  
   return (
-    <>
-      <Stack.Screen options={{ title: 'Tab One' }} />
-      <View style={styles.container}>
-        <ScreenContent path="app/(tabs)/index.tsx" title="Tab One" />
-      </View>
-    </>
+    <ScrollView>
+      <CustomView padding="4" bg="primary">
+        <CustomText variant="h2" weight="bold">
+          Welcome to Doone
+        </CustomText>
+      </CustomView>
+    </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-  },
-});

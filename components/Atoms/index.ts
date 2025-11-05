@@ -12,3 +12,4 @@ export * from './CustomInput';
 export * from './Icon';
 export * from './CheckToggle';
 export * from './Spacer';
+export { CustomPressable } from './CustomPressable';

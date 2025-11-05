@@ -12,22 +12,7 @@ import React from 'react';
 import { Platform, Pressable, PressableProps, ViewStyle } from 'react-native';
 import { useThemeColors } from '~/theme';
 
-export type SpaceSize = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '8' | '10' | '12' | '16';
-
-const SCALE: Record<SpaceSize, number> = {
-  '0': 0,
-  '1': 4,
-  '2': 8,
-  '3': 12,
-  '4': 16,
-  '5': 20,
-  '6': 24,
-  '8': 32,
-  '10': 40,
-  '12': 48,
-  '16': 64,
-};
-
+import { SpaceSize, SCALE } from './spaceConstants';
 const RADIUS = {
   none: 0,
   sm: 4,

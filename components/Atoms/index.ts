@@ -9,3 +9,7 @@ export * from './CustomText';
 export * from './CustomView';
 export * from './CustomButton';
 export * from './CustomInput';
+export * from './Icon';
+export * from './CheckToggle';
+export * from './Spacer';
+export { CustomPressable } from './CustomPressable';

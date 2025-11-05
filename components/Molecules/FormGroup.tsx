@@ -43,11 +43,6 @@ export const FormGroup: React.FC<FormGroupProps> = ({
         helperText={helperText}
         {...inputProps}
       />
-      {!!error && (
-        <CustomText variant="caption" color="error">
-          {error}
-        </CustomText>
-      )}
     </View>
   );
 };

@@ -17,6 +17,11 @@ export interface ToastNotificationProps {
   style?: ViewStyle;
 }
 
+const containerStyle: ViewStyle = {
+  flexDirection: 'row',
+  alignItems: 'center',
+};
+
 export const ToastNotification: React.FC<ToastNotificationProps> = ({
   type = 'info',
   title,
@@ -24,16 +29,34 @@ export const ToastNotification: React.FC<ToastNotificationProps> = ({
   style,
 }) => {
   const iconName =
-    type === 'success' ? 'checkmark-circle' : type === 'error' ? 'close-circle' : type === 'warning' ? 'warning' : 'information-circle';
+    type === 'success'
+      ? 'checkmark-circle'
+      : type === 'error'
+        ? 'close-circle'
+        : type === 'warning'
+          ? 'warning'
+          : 'information-circle';
 
   const bgVariant =
-    type === 'success' ? 'success' : type === 'error' ? 'error' : type === 'warning' ? 'warning' : 'info';
+    type === 'success'
+      ? 'success'
+      : type === 'error'
+        ? 'error'
+        : type === 'warning'
+          ? 'warning'
+          : 'info';
 
   const textVariant =
-    type === 'error' ? 'error' : type === 'warning' ? 'warning' : type === 'success' ? 'success' : 'info';
+    type === 'error'
+      ? 'error'
+      : type === 'warning'
+        ? 'warning'
+        : type === 'success'
+          ? 'success'
+          : 'info';
 
   return (
-    <CustomView bg={bgVariant} padding="3" rounded="md" style={[{ flexDirection: 'row', alignItems: 'center' }, style]}>
+    <CustomView bg={bgVariant} padding="3" rounded="md" style={[containerStyle, style]}>
       <Icon family="Ionicons" name={iconName} variant={textVariant as any} />
       <Spacer size="2" horizontal />
       <CustomText variant="body-md" color={textVariant as any}>

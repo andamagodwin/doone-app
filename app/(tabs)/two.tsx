@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { CustomView, Spacer } from '~/components/Atoms';
 import {
@@ -24,7 +24,10 @@ export default function TabTwo() {
   ]);
   const [newTitle, setNewTitle] = useState('');
   const [filter, setFilter] = useState<'all' | 'active' | 'done'>('all');
-  const [showToast, setShowToast] = useState<null | { type: 'success' | 'error'; message: string }>(null);
+  const [showToast, setShowToast] = useState<null | { type: 'success' | 'error'; message: string }>(
+    null
+  );
+  const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const filtered = useMemo(() => {
     if (filter === 'active') return tasks.filter((t) => !t.completed);
@@ -45,8 +48,22 @@ export default function TabTwo() {
     setTasks((prev) => [{ id, title: newTitle.trim(), completed: false }, ...prev]);
     setNewTitle('');
     setShowToast({ type: 'success', message: 'Task added' });
-    setTimeout(() => setShowToast(null), 1500);
+
+    // Clear any existing timeout before setting a new one
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
+    toastTimeoutRef.current = setTimeout(() => setShowToast(null), 1500);
   };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) {
+        clearTimeout(toastTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <ScrollView>
@@ -59,9 +76,17 @@ export default function TabTwo() {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <FilterChip label="All" selected={filter === 'all'} onChange={() => setFilter('all')} />
           <Spacer size="2" horizontal />
-          <FilterChip label="Active" selected={filter === 'active'} onChange={() => setFilter('active')} />
+          <FilterChip
+            label="Active"
+            selected={filter === 'active'}
+            onChange={() => setFilter('active')}
+          />
           <Spacer size="2" horizontal />
-          <FilterChip label="Done" selected={filter === 'done'} onChange={() => setFilter('done')} />
+          <FilterChip
+            label="Done"
+            selected={filter === 'done'}
+            onChange={() => setFilter('done')}
+          />
         </View>
 
         <Spacer size="4" />
@@ -95,9 +120,7 @@ export default function TabTwo() {
 
         <Spacer size="4" />
 
-        {showToast && (
-          <ToastNotification type={showToast.type} title={showToast.message} />
-        )}
+        {showToast && <ToastNotification type={showToast.type} title={showToast.message} />}
       </CustomView>
     </ScrollView>
   );

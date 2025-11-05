@@ -14,13 +14,13 @@ export default function Home() {
   return (
     <ScrollView>
       <CustomView padding="4" bg="primary">
-        <CustomText variant="h2" weight="bold">
-          Welcome to Doone
+        <CustomView style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <CustomText variant="h2" weight="bold">
+            Welcome to Doone
+          </CustomText>
           <Icon family="Ionicons" name="add" size="lg" variant="brand-primary" />
           <CheckToggle value={done} onChange={setDone} size="md" />
-
-          
-        </CustomText>
+        </CustomView>
       </CustomView>
     </ScrollView>
   );

@@ -29,7 +29,13 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({ title, onAddPress, o
       <Spacer size="3" horizontal />
 
       {/* Settings */}
-      <Icon family="Ionicons" name="settings-outline" variant="secondary" />
+      {onSettingsPress ? (
+        <CustomButton variant="secondary" size="sm" onPress={onSettingsPress}>
+          <Icon family="Ionicons" name="settings-outline" variant="secondary" />
+        </CustomButton>
+      ) : (
+        <Icon family="Ionicons" name="settings-outline" variant="secondary" />
+      )}
     </View>
   );
 };

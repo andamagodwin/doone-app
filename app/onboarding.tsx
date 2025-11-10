@@ -9,6 +9,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, FlatList, Dimensions, ViewToken, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CalendarBro from '../assets/onboarding/Calendar-bro.svg';
+import TimeManagementBro from '../assets/onboarding/Time-management-bro.svg';
+import BulletJournalBro from '../assets/onboarding/Bullet-journal-bro.svg';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -16,27 +19,28 @@ interface OnboardingSlide {
   id: string;
   title: string;
   description: string;
-  emoji: string;
+  illustrationType: 'svg' | 'emoji';
+  emojiContent?: string;
 }
 
-const slides: OnboardingSlide[] = [
+const slidesData: OnboardingSlide[] = [
   {
     id: '1',
     title: 'Manage your tasks',
     description: 'You can easily manage all of your daily\ntasks in Doone for free',
-    emoji: '📋',
+    illustrationType: 'svg',
   },
   {
     id: '2',
     title: 'Create daily routine',
     description: 'In Uptodo you can create your\npersonalized routine to stay productive',
-    emoji: '📅',
+    illustrationType: 'svg',
   },
   {
     id: '3',
     title: 'Organize your tasks',
     description: 'You can organize your daily tasks by\nadding your tasks into separate categories',
-    emoji: '📊',
+    illustrationType: 'svg',
   },
 ];
 
@@ -74,7 +78,7 @@ export default function OnboardingScreen() {
   ).current;
 
   const handleNext = () => {
-    if (currentIndex < slides.length - 1) {
+    if (currentIndex < slidesData.length - 1) {
       flatListRef.current?.scrollToIndex({
         index: currentIndex + 1,
         animated: true,
@@ -102,12 +106,14 @@ export default function OnboardingScreen() {
     <View style={{ width: SCREEN_WIDTH }} className="flex-1 items-center justify-center px-8">
       {/* Illustration */}
       <View className="mb-12 h-64 w-64 items-center justify-center">
-        <Text className="text-[120px]">{item.emoji}</Text>
+        {item.id === '1' && <CalendarBro width={256} height={256} />}
+        {item.id === '2' && <TimeManagementBro width={256} height={256} />}
+        {item.id === '3' && <BulletJournalBro width={256} height={256} />}
       </View>
 
       {/* Pagination dots */}
       <View className="mb-12 flex-row">
-        {slides.map((_, index) => (
+        {slidesData.map((_, index) => (
           <View
             key={index}
             className="mx-1 h-2 rounded"
@@ -136,7 +142,7 @@ export default function OnboardingScreen() {
 
       <FlatList
         ref={flatListRef}
-        data={slides}
+        data={slidesData}
         renderItem={renderSlide}
         keyExtractor={(item) => item.id}
         horizontal
@@ -164,7 +170,7 @@ export default function OnboardingScreen() {
           className="min-w-[120px] items-center rounded-lg bg-primary px-12 py-3.5 active:opacity-80"
         >
           <Text className="text-sm font-semibold text-white">
-            {currentIndex === slides.length - 1 ? 'GET STARTED' : 'NEXT'}
+            {currentIndex === slidesData.length - 1 ? 'GET STARTED' : 'NEXT'}
           </Text>
         </Pressable>
       </View>

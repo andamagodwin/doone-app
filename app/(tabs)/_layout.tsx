@@ -3,6 +3,10 @@ import { View, Pressable, Platform } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import HomeIcon from '../../assets/home/icons/home.svg';
+import CalendarIcon from '../../assets/home/icons/calendar.svg';
+import ClockIcon from '../../assets/home/icons/clock.svg';
+import UserIcon from '../../assets/home/icons/user.svg';
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
@@ -30,7 +34,7 @@ export default function TabLayout() {
         options={{
           title: 'Index',
           tabBarIcon: ({ color, focused }) => (
-            <FontAwesome name="home" size={24} color={color} />
+            <HomeIcon width={24} height={24} fill={color} />
           ),
         }}
       />
@@ -39,7 +43,7 @@ export default function TabLayout() {
         options={{
           title: 'Calendar',
           tabBarIcon: ({ color, focused }) => (
-            <FontAwesome name="calendar" size={24} color={color} />
+            <CalendarIcon width={24} height={24} fill={color} />
           ),
         }}
       />
@@ -87,7 +91,7 @@ export default function TabLayout() {
         options={{
           title: 'Focus',
           tabBarIcon: ({ color, focused }) => (
-            <FontAwesome name="clock-o" size={24} color={color} />
+            <ClockIcon width={24} height={24} fill={color} />
           ),
         }}
       />
@@ -96,7 +100,7 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, focused }) => (
-            <FontAwesome name="user" size={24} color={color} />
+            <UserIcon width={24} height={24} fill={color} />
           ),
         }}
       />

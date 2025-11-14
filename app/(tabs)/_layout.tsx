@@ -7,6 +7,7 @@ import HomeIcon from '../../assets/home/icons/home.svg';
 import CalendarIcon from '../../assets/home/icons/calendar.svg';
 import ClockIcon from '../../assets/home/icons/clock.svg';
 import UserIcon from '../../assets/home/icons/user.svg';
+import AddIcon from '../../assets/home/icons/add.svg';
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
@@ -80,7 +81,7 @@ export default function TabLayout() {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                <FontAwesome name="plus" size={28} color="#FFFFFF" />
+                <AddIcon width={28} height={28} fill="#FFFFFF" />
               </Pressable>
             </View>
           ),

@@ -33,7 +33,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Index',
+          title: 'Home',
           tabBarIcon: ({ color, focused }) => (
             <HomeIcon width={24} height={24} fill={color} />
           ),
@@ -61,15 +61,16 @@ export default function TabLayout() {
                 width: 70,
                 height: 70,
                 borderRadius: 35,
-                backgroundColor: '#6C63FF',
+                backgroundColor: '#36cf94',
                 alignItems: 'center',
                 justifyContent: 'center',
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 4 },
                 shadowOpacity: 0.3,
                 shadowRadius: 8,
-                elevation: 8,
+                elevation: 0,
               }}>
+
               <Pressable
                 onPress={() => {
                   // Handle add action

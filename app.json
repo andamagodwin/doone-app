@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "doone-app",
-    "slug": "doone-app",
+    "name": "Doone",
+    "slug": "doone",
     "version": "1.0.0",
-    "scheme": "doone-app",
+    "scheme": "doone",
     "web": {
       "bundler": "metro",
       "output": "static",

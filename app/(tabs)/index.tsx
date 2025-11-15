@@ -90,11 +90,18 @@ export default function Home() {
   return (
     <View className='flex-1 bg-gray-50'>
       {/* Header */}
-      <View className="bg-white px-5 pt-12 pb-4">
-        <View className="flex-row items-center justify-between mb-6">
-          <Text className="text-xl font-bold text-gray-900">{getHeaderText()}</Text>
-          <Pressable className="p-2">
-            <View className="flex-row space-x-1">
+      <View className="bg-primary/10 px-5 pt-12 pb-4">
+        <View className="flex-row items-center justify-center mb-6 relative">
+          <Text className="text-lg font-bold text-gray-900">{getHeaderText()}</Text>
+          <Pressable 
+            className="p-2 active:opacity-50 absolute right-0"
+            onPress={() => {
+              // Handle menu action
+              console.log('Menu pressed');
+              // TODO: Open menu/options
+            }}
+          >
+            <View className="flex-row gap-1.5">
               <View className="w-1 h-1 rounded-full bg-gray-900" />
               <View className="w-1 h-1 rounded-full bg-gray-900" />
               <View className="w-1 h-1 rounded-full bg-gray-900" />
@@ -133,8 +140,8 @@ export default function Home() {
                 <Text 
                   className={`text-md p-1 rounded-full ${
                     isSelected 
-                      ? 'text-gray-700 bg-white' 
-                      : 'text-gray-700'
+                      ? 'text-white border-1 border-white'
+                      : 'text-gray-700 border-1 border-gray-200'
                   }`}
                 >
                   {item.date}

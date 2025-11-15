@@ -1,7 +1,5 @@
 import { Tabs } from 'expo-router';
-import { View, Pressable, Platform } from 'react-native';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { router } from 'expo-router';
+import { View, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import HomeIcon from '../../assets/home/icons/home.svg';
 import CalendarIcon from '../../assets/home/icons/calendar.svg';
@@ -26,7 +24,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: '#000000',
         tabBarInactiveTintColor: '#0c0c0c99',
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: 10,
           fontWeight: '500',
         },
       }}>

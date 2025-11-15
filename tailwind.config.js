@@ -16,6 +16,13 @@ module.exports = {
         focus: '#165caf',
         error: '#d32f2f',
       },
+      fontFamily: {
+        lato: ['Lato-Regular'],
+        'lato-light': ['Lato-Light'],
+        'lato-bold': ['Lato-Bold'],
+        'lato-black': ['Lato-Black'],
+        'lato-italic': ['Lato-Italic'],
+      },
     },
   },
   plugins: [],

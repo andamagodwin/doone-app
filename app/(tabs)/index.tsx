@@ -107,7 +107,7 @@ export default function Home() {
           ref={scrollViewRef}
           horizontal 
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 10, gap: 12 }}
+          contentContainerStyle={{ paddingHorizontal: 10, gap: 11 }}
           style={{ marginHorizontal: -20 }}
         >
           {weekDates.map((item, index) => {
@@ -131,7 +131,7 @@ export default function Home() {
                   {item.day}
                 </Text>
                 <Text 
-                  className={`text-2xl p-2 rounded-full ${
+                  className={`text-md p-1 rounded-full ${
                     isSelected 
                       ? 'text-gray-700 bg-white' 
                       : 'text-gray-700'

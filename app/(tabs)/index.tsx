@@ -34,6 +34,19 @@ export default function Home() {
 
   const [weekDates] = useState(generateWeekDates());
   const itemPositions = useRef<Record<string, number>>({});
+  
+  // Calculate snap points for Sundays only
+  const snapOffsets = useMemo(() => {
+    const offsets: number[] = [];
+    weekDates.forEach((item, index) => {
+      if (item.day === 'Su') {
+        // Approximate offset for each Sunday (item width ~52px)
+        offsets.push(index * 52);
+      }
+    });
+    return offsets;
+  }, [weekDates]);
+  
   const getKey = (d: { date: number; month: number; year: number }) => `${d.year}-${d.month}-${d.date}`;
   const scrollToDate = useCallback((d: { date: number; month: number; year: number }) => {
     const key = getKey(d);
@@ -88,11 +101,11 @@ export default function Home() {
   };
 
   return (
-    <View className='flex-1 bg-gray-50'>
+    <View className='flex-1 bg-primary/10'>
       {/* Header */}
-      <View className="bg-primary/10 px-5 pt-12 pb-4">
+      <View className="px-5 pt-12 pb-4">
         <View className="flex-row items-center justify-center mb-6 relative">
-          <Text className="text-lg font-bold text-gray-900">{getHeaderText()}</Text>
+          <Text className="text-lg font-extrabold text-gray-900">{getHeaderText()}</Text>
           <Pressable 
             className="p-2 active:opacity-50 absolute right-0"
             onPress={() => {
@@ -114,6 +127,9 @@ export default function Home() {
           ref={scrollViewRef}
           horizontal 
           showsHorizontalScrollIndicator={false}
+          snapToOffsets={snapOffsets}
+          snapToAlignment="start"
+          decelerationRate="fast"
           contentContainerStyle={{ paddingHorizontal: 10, gap: 11 }}
           style={{ marginHorizontal: -20 }}
         >
@@ -130,7 +146,7 @@ export default function Home() {
                   itemPositions.current[getKey(item)] = e.nativeEvent.layout.x;
                 }}
                 onPress={() => handleDateSelect(item)}
-                className={`items-center px-2 py-2 rounded-full min-w-[40px] ${
+                className={`items-center px-2 py-3 rounded-full min-w-[40px] ${
                   isSelected ? 'bg-primary' : isTodayItem ? 'bg-gray-100/60' : 'bg-transparent'
                 } active:bg-gray-200`}
               >
@@ -138,10 +154,10 @@ export default function Home() {
                   {item.day}
                 </Text>
                 <Text 
-                  className={`text-md p-1 rounded-full ${
+                  className={`text-sm py-1 px-2 rounded-2xl ${
                     isSelected 
-                      ? 'text-white border-1 border-white'
-                      : 'text-gray-700 border-1 border-gray-200'
+                      ? 'text-black border-0 bg-white/80'
+                      : 'text-gray-700 border-2 border-gray-200'
                   }`}
                 >
                   {item.date}
@@ -153,7 +169,7 @@ export default function Home() {
       </View>
 
       {/* Content Area */}
-      <View className='flex-1 items-center bg-white justify-center px-8'>
+      <View className='flex-1 items-center bg-white justify-center px-8 rounded-t-3xl'>
         <Text className="mb-4 text-lg text-gray-600">Your tasks will appear here</Text>
         
         <Pressable

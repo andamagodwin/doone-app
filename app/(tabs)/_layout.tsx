@@ -17,14 +17,14 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#363636',
+          backgroundColor: '#ffffff',
           borderTopWidth: 0,
           height: 70 + insets.bottom,
           paddingBottom: insets.bottom > 0 ? insets.bottom : 10,
           paddingTop: 5,
         },
-        tabBarActiveTintColor: '#FFFFFF',
-        tabBarInactiveTintColor: '#FFFFFF99',
+        tabBarActiveTintColor: '#000000',
+        tabBarInactiveTintColor: '#0c0c0c99',
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '500',
@@ -35,7 +35,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color, focused }) => (
-            <HomeIcon width={24} height={24} fill={color} />
+            <HomeIcon width={24} height={24} fill={'none'} />
           ),
         }}
       />
@@ -44,7 +44,7 @@ export default function TabLayout() {
         options={{
           title: 'Calendar',
           tabBarIcon: ({ color, focused }) => (
-            <CalendarIcon width={24} height={24} fill={color} />
+            <CalendarIcon width={24} height={24} fill={'none'} />
           ),
         }}
       />
@@ -93,7 +93,7 @@ export default function TabLayout() {
         options={{
           title: 'Focus',
           tabBarIcon: ({ color, focused }) => (
-            <ClockIcon width={24} height={24} fill={color} />
+            <ClockIcon width={24} height={24} fill={'none'} />
           ),
         }}
       />
@@ -102,7 +102,7 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, focused }) => (
-            <UserIcon width={24} height={24} fill={color} />
+            <UserIcon width={24} height={24} fill={'none'} />
           ),
         }}
       />

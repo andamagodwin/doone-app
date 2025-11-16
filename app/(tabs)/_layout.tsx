@@ -1,10 +1,14 @@
 import { Tabs } from 'expo-router';
 import { View, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import HomeIcon from '../../assets/home/icons/home.svg';
-import CalendarIcon from '../../assets/home/icons/calendar.svg';
-import ClockIcon from '../../assets/home/icons/clock.svg';
-import UserIcon from '../../assets/home/icons/user.svg';
+// import HomeIcon from '../../assets/home/icons/home.svg';
+import HomeBoldIcon from '../../assets/home/icons/home-bold.svg';
+// import CalendarIcon from '../../assets/home/icons/calendar.svg';
+import CalendarBoldIcon from '../../assets/home/icons/calendar-bold.svg';
+// import ClockIcon from '../../assets/home/icons/clock.svg';
+import ClockBoldIcon from '../../assets/home/icons/clock-bold.svg';
+// import UserIcon from '../../assets/home/icons/user.svg';
+import UserBoldIcon from '../../assets/home/icons/user-bold.svg';
 import AddIcon from '../../assets/home/icons/add.svg';
 
 export default function TabLayout() {
@@ -22,7 +26,7 @@ export default function TabLayout() {
           paddingTop: 5,
         },
         tabBarActiveTintColor: '#000000',
-        tabBarInactiveTintColor: '#0c0c0c99',
+        tabBarInactiveTintColor: '#d9e3f0',
         tabBarLabelStyle: {
           fontSize: 10,
           fontWeight: '500',
@@ -33,7 +37,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color, focused }) => (
-            <HomeIcon width={24} height={24} fill={'none'} />
+            <HomeBoldIcon width={24} height={24} color={focused ? '#000000' : '#d9e3f0'} />
           ),
         }}
       />
@@ -42,7 +46,7 @@ export default function TabLayout() {
         options={{
           title: 'Calendar',
           tabBarIcon: ({ color, focused }) => (
-            <CalendarIcon width={24} height={24} fill={'none'} />
+            <CalendarBoldIcon width={24} height={24} color={focused ? '#000000' : '#d9e3f0'} />
           ),
         }}
       />
@@ -80,7 +84,7 @@ export default function TabLayout() {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                <AddIcon width={28} height={28} fill="#FFFFFF" />
+                <AddIcon width={28} height={28} color="#FFFFFF" />
               </Pressable>
             </View>
           ),
@@ -91,7 +95,7 @@ export default function TabLayout() {
         options={{
           title: 'Focus',
           tabBarIcon: ({ color, focused }) => (
-            <ClockIcon width={24} height={24} fill={'none'} />
+            <ClockBoldIcon width={24} height={24} color={focused ? '#000000' : '#d9e3f0'} />
           ),
         }}
       />
@@ -100,7 +104,7 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, focused }) => (
-            <UserIcon width={24} height={24} fill={'none'} />
+            <UserBoldIcon width={24} height={24} color={focused ? '#000000' : '#d9e3f0'} />
           ),
         }}
       />

@@ -18,8 +18,8 @@ export interface DateScrollerProps {
 
 // Move constants outside component to avoid recreation
 const DAY_NAMES = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-const ITEM_WIDTH = 52;
-const ITEM_GAP = 11;
+const ITEM_WIDTH = 56;
+const ITEM_GAP = 8;
 const TOTAL_ITEM_WIDTH = ITEM_WIDTH + ITEM_GAP;
 
 // Utility to create date key
@@ -71,21 +71,22 @@ export const DateScroller: React.FC<DateScrollerProps> = ({
     return dates;
   }, [daysRange]);
 
-  // Calculate snap points for Sundays only
+  // Calculate snap points for every week (7 days)
   const snapOffsets = useMemo(() => {
     const offsets: number[] = [];
-    weekDates.forEach((item, index) => {
-      if (item.day === 'Su') {
-        offsets.push(index * TOTAL_ITEM_WIDTH);
-      }
-    });
+    for (let i = 0; i < weekDates.length; i += 7) {
+      offsets.push(i * TOTAL_ITEM_WIDTH);
+    }
     return offsets;
   }, [weekDates]);
 
-  // Find initial scroll index
+  // Find initial scroll index - snap to the week containing the initial date
   const initialScrollIndex = useMemo(() => {
     const initialKey = getDateKey(initialDate);
-    return weekDates.findIndex(item => item.key === initialKey);
+    const dateIndex = weekDates.findIndex(item => item.key === initialKey);
+    if (dateIndex === -1) return 0;
+    // Snap to the start of the week (every 7 days)
+    return Math.floor(dateIndex / 7) * 7;
   }, [weekDates, initialDate]);
 
   // Scroll to initial date on mount
@@ -117,11 +118,11 @@ export const DateScroller: React.FC<DateScrollerProps> = ({
     return (
       <Pressable
         onPress={() => handleDateSelect(item)}
-        className={`items-center px-3 py-3.5 rounded-2xl min-w-[52px] ${
+        className={`items-center px-2.5 py-3.5 rounded-2xl w-[56px] ${
           isSelected
-            ? 'bg-primary shadow-sm'
+            ? 'bg-primary shadow-xs'
             : isTodayItem
-            ? 'bg-primary/10 border-2 border-primary/20'
+            ? 'bg-primary/10 border-1 border-primary/20'
             : 'bg-transparent'
         } active:scale-95`}
         style={{ marginRight: ITEM_GAP }}>
@@ -138,9 +139,9 @@ export const DateScroller: React.FC<DateScrollerProps> = ({
         </Text>
         <Text
           variant="bodySmall"
-          className={`py-1.5 px-2.5 rounded-xl font-lato-bold ${
+          className={`py-1.5 px-2.5 rounded-xl font-lato-bold min-w-[24px] text-center ${
             isSelected
-              ? 'text-gray-900 bg-white shadow-sm'
+              ? 'text-gray-900 bg-white shadow-xs'
               : isTodayItem
               ? 'text-primary bg-white border-2 border-primary/30'
               : 'text-gray-700 bg-gray-100'

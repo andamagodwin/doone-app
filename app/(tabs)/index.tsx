@@ -2,9 +2,11 @@ import { View, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useMemo } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DateScroller, Text, Button } from '~/components/design-system';
 
 export default function Home() {
+  const insets = useSafeAreaInsets();
   const today = useMemo(() => {
     const date = new Date();
     date.setHours(0, 0, 0, 0);
@@ -48,25 +50,30 @@ export default function Home() {
   return (
     <View className='flex-1 bg-primary/10'>
       {/* Header */}
-      <View className="px-5 pt-12 pb-4">
-        <View className="flex-row items-center justify-center mb-6 relative">
-          <Text variant="body" className="text-lg font-lato-bold text-gray-900">
+      <View
+        className="px-5 pb-5"
+        style={{ paddingTop: insets.top + 16 }}>
+        <View className="flex-row items-center justify-between mb-7">
+          <View className="flex-1" />
+          <Text variant="body" className="text-xl font-lato-bold text-gray-900">
             {getHeaderText()}
           </Text>
-          <Pressable
-            className="p-2 active:opacity-50 absolute right-0"
-            onPress={() => {
-              // Handle menu action
-              console.log('Menu pressed');
-              // TODO: Open menu/options
-            }}
-          >
-            <View className="flex-row gap-1.5">
-              <View className="w-1 h-1 rounded-full bg-gray-900" />
-              <View className="w-1 h-1 rounded-full bg-gray-900" />
-              <View className="w-1 h-1 rounded-full bg-gray-900" />
-            </View>
-          </Pressable>
+          <View className="flex-1 items-end">
+            <Pressable
+              className="p-2 active:opacity-50"
+              onPress={() => {
+                // Handle menu action
+                console.log('Menu pressed');
+                // TODO: Open menu/options
+              }}
+            >
+              <View className="flex-row gap-1.5">
+                <View className="w-1 h-1 rounded-full bg-gray-900" />
+                <View className="w-1 h-1 rounded-full bg-gray-900" />
+                <View className="w-1 h-1 rounded-full bg-gray-900" />
+              </View>
+            </Pressable>
+          </View>
         </View>
 
         {/* Horizontal Date Scroller */}

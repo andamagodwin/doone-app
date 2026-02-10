@@ -13,8 +13,8 @@ export * from './atoms';
 // Molecules
 export * from './molecules';
 
-// Organisms (not yet implemented)
-// export * from './organisms';
+// Organisms
+export * from './organisms';
 
 // Templates (not yet implemented)
 // export * from './templates';

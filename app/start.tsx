@@ -1,12 +1,13 @@
 /**
  * Start/Welcome Screen
- * 
+ *
  * Final screen in onboarding flow with Login and Create Account options.
  */
 
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View } from 'react-native';
 import { router } from 'expo-router';
+import { Surface, Heading, Text, Button, Link } from '~/components/design-system';
 
 export default function StartScreen() {
   const handleLogin = () => {
@@ -25,46 +26,42 @@ export default function StartScreen() {
   };
 
   return (
-    <View className="flex-1 bg-white">
+    <Surface useSafeArea className="flex-1">
       {/* Skip button */}
       <View className="absolute right-6 top-16 z-10">
-        <Pressable onPress={handleSkip} className="px-4 py-2">
-          <Text className="text-base font-semibold text-gray-500">Skip</Text>
-        </Pressable>
+        <Link onPress={handleSkip} size="md" className="px-4 py-2">
+          Skip
+        </Link>
       </View>
 
       <View className="flex-1 items-center justify-center px-8">
-       
-
         {/* Welcome heading */}
-        <Text className="mb-4 text-center text-[32px] font-bold text-gray-900">
+        <Heading level="h1" className="mb-4 text-center">
           Welcome to Doone
-        </Text>
+        </Heading>
 
         {/* Subtitle */}
-        <Text className="mb-16 text-center text-base leading-6 text-gray-600">
+        <Text variant="body" className="mb-16 text-center text-gray-600">
           Please login to your account or create{'\n'}new account to continue
         </Text>
 
-       
-
         {/* Action buttons */}
-        <View className="w-full">
-          <Pressable
+        <View className="w-full gap-4">
+          <Button
+            title="LOGIN"
+            variant="primary"
             onPress={handleLogin}
-            className="mb-4 items-center rounded-lg bg-primary py-4 active:opacity-80"
-          >
-            <Text className="text-base font-semibold text-white">LOGIN</Text>
-          </Pressable>
+            size="lg"
+          />
 
-          <Pressable
+          <Button
+            title="CREATE ACCOUNT"
+            variant="outline"
             onPress={handleCreateAccount}
-            className="items-center rounded-lg border-2 border-primary bg-transparent py-4 active:opacity-80"
-          >
-            <Text className="text-base font-semibold text-primary">CREATE ACCOUNT</Text>
-          </Pressable>
+            size="lg"
+          />
         </View>
       </View>
-    </View>
+    </Surface>
   );
 }

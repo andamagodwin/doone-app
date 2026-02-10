@@ -1,9 +1,9 @@
-import { View, Text } from 'react-native';
+import { Surface, Heading } from '~/components/design-system';
 
 export default function Focus() {
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Text className="text-2xl font-bold">Focus</Text>
-    </View>
+    <Surface useSafeArea className="flex-1 items-center justify-center">
+      <Heading level="h2">Focus</Heading>
+    </Surface>
   );
 }

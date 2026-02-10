@@ -1,9 +1,9 @@
-import { View, Text } from 'react-native';
+import { Surface, Heading } from '~/components/design-system';
 
 export default function Profile() {
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Text className="text-2xl font-bold">Profile</Text>
-    </View>
+    <Surface useSafeArea className="flex-1 items-center justify-center">
+      <Heading level="h2">Profile</Heading>
+    </Surface>
   );
 }

@@ -5,19 +5,20 @@ import { useState, useMemo } from 'react';
 import { DateScroller, Text, Button } from '~/components/design-system';
 
 export default function Home() {
-  const today = useMemo(() => new Date(), []);
-  const [selectedDate, setSelectedDate] = useState({
-    date: today.getDate(),
-    month: today.getMonth(),
-    year: today.getFullYear(),
-  });
+  const today = useMemo(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }, []);
+
+  const [selectedDate, setSelectedDate] = useState<Date>(today);
 
   // Get display text for the header
   const getHeaderText = () => {
-    const selected = new Date(selectedDate.year, selectedDate.month, selectedDate.date);
+    const selected = new Date(selectedDate);
+    selected.setHours(0, 0, 0, 0);
     const todayDate = new Date();
     todayDate.setHours(0, 0, 0, 0);
-    selected.setHours(0, 0, 0, 0);
 
     const diffTime = selected.getTime() - todayDate.getTime();
     const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
@@ -30,11 +31,11 @@ export default function Home() {
       return 'Tomorrow';
     } else {
       const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      return `${monthNames[selectedDate.month]} ${selectedDate.date}, ${selectedDate.year}`;
+      return `${monthNames[selectedDate.getMonth()]} ${selectedDate.getDate()}, ${selectedDate.getFullYear()}`;
     }
   };
 
-  const handleDateSelect = (date: { date: number; month: number; year: number }) => {
+  const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
   };
 

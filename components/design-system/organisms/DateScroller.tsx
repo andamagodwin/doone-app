@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { View, ScrollView, Pressable } from 'react-native';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { FlatList, Pressable, ListRenderItemInfo } from 'react-native';
 import { Text } from '../atoms/Text';
 
 interface DateItem {
@@ -7,151 +7,188 @@ interface DateItem {
   date: number;
   month: number;
   year: number;
-  fullDate: Date;
+  key: string;
 }
 
 export interface DateScrollerProps {
-  onDateSelect?: (date: { date: number; month: number; year: number }) => void;
+  onDateSelect?: (date: Date) => void;
   initialDate?: Date;
   daysRange?: number;
 }
+
+// Move constants outside component to avoid recreation
+const DAY_NAMES = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+const ITEM_WIDTH = 52;
+const ITEM_GAP = 11;
+const TOTAL_ITEM_WIDTH = ITEM_WIDTH + ITEM_GAP;
+
+// Utility to create date key
+const getDateKey = (date: Date): string =>
+  `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+
+// Utility to check if two dates are same day
+const isSameDay = (date1: Date, date2: Date): boolean =>
+  date1.getDate() === date2.getDate() &&
+  date1.getMonth() === date2.getMonth() &&
+  date1.getFullYear() === date2.getFullYear();
 
 export const DateScroller: React.FC<DateScrollerProps> = ({
   onDateSelect,
   initialDate = new Date(),
   daysRange = 30,
 }) => {
-  const today = useMemo(() => new Date(), []);
-  const scrollViewRef = useRef<ScrollView>(null);
-  const [selectedDate, setSelectedDate] = useState(initialDate.getDate());
-  const [selectedMonth, setSelectedMonth] = useState(initialDate.getMonth());
-  const [selectedYear, setSelectedYear] = useState(initialDate.getFullYear());
+  const flatListRef = useRef<FlatList>(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(initialDate);
 
-  // Generate dates centered around today
-  const generateWeekDates = useCallback(() => {
+  // Memoize today's date and key once
+  const today = useMemo(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }, []);
+
+  const todayKey = useMemo(() => getDateKey(today), [today]);
+
+  // Generate dates centered around today - memoized with proper dependencies
+  const weekDates = useMemo(() => {
     const dates: DateItem[] = [];
     const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
 
     // Generate dates (daysRange before and daysRange after today)
     for (let i = -daysRange; i <= daysRange; i++) {
       const date = new Date(currentDate);
       date.setDate(currentDate.getDate() + i);
 
-      const dayNames = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
       dates.push({
-        day: dayNames[date.getDay()],
+        day: DAY_NAMES[date.getDay()],
         date: date.getDate(),
         month: date.getMonth(),
         year: date.getFullYear(),
-        fullDate: date,
+        key: getDateKey(date),
       });
     }
     return dates;
   }, [daysRange]);
-
-  const [weekDates] = useState(generateWeekDates());
-  const itemPositions = useRef<Record<string, number>>({});
 
   // Calculate snap points for Sundays only
   const snapOffsets = useMemo(() => {
     const offsets: number[] = [];
     weekDates.forEach((item, index) => {
       if (item.day === 'Su') {
-        // Approximate offset for each Sunday (item width ~52px)
-        offsets.push(index * 52);
+        offsets.push(index * TOTAL_ITEM_WIDTH);
       }
     });
     return offsets;
   }, [weekDates]);
 
-  const getKey = (d: { date: number; month: number; year: number }) =>
-    `${d.year}-${d.month}-${d.date}`;
-
-  const scrollToDate = useCallback(
-    (d: { date: number; month: number; year: number }) => {
-      const key = getKey(d);
-      const x = itemPositions.current[key];
-      if (x != null && scrollViewRef.current) {
-        // Align selected/today to the left edge with small padding
-        scrollViewRef.current.scrollTo({ x: Math.max(0, x - 10), animated: false });
-      }
-    },
-    []
-  );
+  // Find initial scroll index
+  const initialScrollIndex = useMemo(() => {
+    const initialKey = getDateKey(initialDate);
+    return weekDates.findIndex(item => item.key === initialKey);
+  }, [weekDates, initialDate]);
 
   // Scroll to initial date on mount
   useEffect(() => {
-    const id = setTimeout(() => {
-      scrollToDate({
-        date: initialDate.getDate(),
-        month: initialDate.getMonth(),
-        year: initialDate.getFullYear(),
-      });
-    }, 50);
-    return () => clearTimeout(id);
-  }, [weekDates, initialDate, scrollToDate]);
+    if (initialScrollIndex !== -1 && flatListRef.current) {
+      const timeout = setTimeout(() => {
+        flatListRef.current?.scrollToIndex({
+          index: initialScrollIndex,
+          animated: false,
+          viewPosition: 0,
+        });
+      }, 100);
+      return () => clearTimeout(timeout);
+    }
+  }, [initialScrollIndex]);
 
   const handleDateSelect = (item: DateItem) => {
-    setSelectedDate(item.date);
-    setSelectedMonth(item.month);
-    setSelectedYear(item.year);
-    onDateSelect?.({ date: item.date, month: item.month, year: item.year });
+    const newDate = new Date(item.year, item.month, item.date);
+    setSelectedDate(newDate);
+    onDateSelect?.(newDate);
   };
 
+  // Memoized render item
+  const renderItem = ({ item }: ListRenderItemInfo<DateItem>) => {
+    const itemDate = new Date(item.year, item.month, item.date);
+    const isSelected = isSameDay(selectedDate, itemDate);
+    const isTodayItem = item.key === todayKey;
+
+    return (
+      <Pressable
+        onPress={() => handleDateSelect(item)}
+        className={`items-center px-3 py-3.5 rounded-2xl min-w-[52px] ${
+          isSelected
+            ? 'bg-primary shadow-sm'
+            : isTodayItem
+            ? 'bg-primary/10 border-2 border-primary/20'
+            : 'bg-transparent'
+        } active:scale-95`}
+        style={{ marginRight: ITEM_GAP }}>
+        <Text
+          variant="caption"
+          className={`mb-2 font-lato-bold ${
+            isSelected
+              ? 'text-white'
+              : isTodayItem
+              ? 'text-primary'
+              : 'text-gray-500'
+          }`}>
+          {item.day}
+        </Text>
+        <Text
+          variant="bodySmall"
+          className={`py-1.5 px-2.5 rounded-xl font-lato-bold ${
+            isSelected
+              ? 'text-gray-900 bg-white shadow-sm'
+              : isTodayItem
+              ? 'text-primary bg-white border-2 border-primary/30'
+              : 'text-gray-700 bg-gray-100'
+          }`}>
+          {item.date}
+        </Text>
+      </Pressable>
+    );
+  };
+
+  // Optimized layout calculation
+  const getItemLayout = (_: any, index: number) => ({
+    length: TOTAL_ITEM_WIDTH,
+    offset: TOTAL_ITEM_WIDTH * index,
+    index,
+  });
+
+  const keyExtractor = (item: DateItem) => item.key;
+
   return (
-    <ScrollView
-      ref={scrollViewRef}
+    <FlatList
+      ref={flatListRef}
+      data={weekDates}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
       horizontal
       showsHorizontalScrollIndicator={false}
       snapToOffsets={snapOffsets}
       snapToAlignment="start"
       decelerationRate="fast"
-      contentContainerStyle={{ paddingHorizontal: 10, gap: 11 }}
-      style={{ marginHorizontal: -20 }}>
-      {weekDates.map((item, index) => {
-        const isSelected =
-          item.date === selectedDate &&
-          item.month === selectedMonth &&
-          item.year === selectedYear;
-        const isTodayItem =
-          item.date === today.getDate() &&
-          item.month === today.getMonth() &&
-          item.year === today.getFullYear();
-
-        return (
-          <Pressable
-            key={index}
-            onLayout={(e) => {
-              itemPositions.current[getKey(item)] = e.nativeEvent.layout.x;
-            }}
-            onPress={() => handleDateSelect(item)}
-            className={`items-center px-2 py-3 rounded-full min-w-[40px] ${
-              isSelected
-                ? 'bg-primary'
-                : isTodayItem
-                ? 'bg-gray-100/60'
-                : 'bg-transparent'
-            } active:bg-gray-200`}>
-            <Text
-              variant="bodySmall"
-              className={`mb-1 ${
-                isSelected ? 'text-white font-lato-bold' : 'text-gray-500'
-              }`}>
-              {item.day}
-            </Text>
-            <Text
-              variant="bodySmall"
-              className={`py-1 px-2 rounded-2xl ${
-                isSelected
-                  ? 'text-black border-0 bg-white/80'
-                  : 'text-gray-700 border-2 border-gray-200'
-              }`}>
-              {item.date}
-            </Text>
-          </Pressable>
-        );
-      })}
-    </ScrollView>
+      getItemLayout={getItemLayout}
+      initialScrollIndex={initialScrollIndex}
+      contentContainerStyle={{ paddingHorizontal: 10 }}
+      style={{ marginHorizontal: -20 }}
+      removeClippedSubviews
+      maxToRenderPerBatch={15}
+      windowSize={11}
+      onScrollToIndexFailed={(info) => {
+        // Fallback if initial scroll fails
+        const wait = new Promise(resolve => setTimeout(resolve, 100));
+        wait.then(() => {
+          flatListRef.current?.scrollToIndex({
+            index: info.index,
+            animated: false,
+          });
+        });
+      }}
+    />
   );
 };
 

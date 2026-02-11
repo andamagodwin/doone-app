@@ -57,8 +57,7 @@ export default function OnboardingScreen() {
     try {
       const hasSeenOnboarding = await AsyncStorage.getItem('hasSeenOnboarding');
       if (hasSeenOnboarding === 'true') {
-        // User has seen onboarding, skip to main app
-        router.replace('/(tabs)');
+        router.replace('/start');
       }
     } catch (error) {
       console.error('Error checking onboarding status:', error);

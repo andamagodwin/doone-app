@@ -57,7 +57,7 @@ export default function OnboardingScreen() {
     try {
       const hasSeenOnboarding = await AsyncStorage.getItem('hasSeenOnboarding');
       if (hasSeenOnboarding === 'true') {
-        router.replace('/start');
+        router.replace('/(auth)/start');
       }
     } catch (error) {
       console.error('Error checking onboarding status:', error);
@@ -98,7 +98,7 @@ export default function OnboardingScreen() {
 
   const handleGetStarted = async () => {
     await AsyncStorage.setItem('hasSeenOnboarding', 'true');
-    router.replace('/start' as any);
+    router.replace('/(auth)/start' as any);
   };
 
   const renderSlide = ({ item }: { item: OnboardingSlide }) => (

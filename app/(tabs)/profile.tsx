@@ -10,7 +10,7 @@ export default function Profile() {
 
   const handleSignOut = async () => {
     await signOut();
-    router.replace('/start');
+    router.replace('/(auth)/start');
   };
 
   const displayName = user?.email?.split('@')[0] ?? 'User';

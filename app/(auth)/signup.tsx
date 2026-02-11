@@ -39,7 +39,7 @@ export default function SignupScreen() {
       if (session) {
         router.replace('/(tabs)');
       } else {
-        router.replace('/login');
+        router.replace('/(auth)/login');
       }
     }
   };
@@ -118,7 +118,7 @@ export default function SignupScreen() {
             <Text variant="body" className="text-gray-600">
               Already have an account?
             </Text>
-            <Link onPress={() => router.replace('/login')} size="md">
+            <Link onPress={() => router.replace('/(auth)/login')} size="md">
               Login
             </Link>
           </View>

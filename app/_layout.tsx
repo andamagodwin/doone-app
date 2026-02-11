@@ -57,7 +57,7 @@ export default function RootLayout() {
   useEffect(() => {
     if (!fontsLoaded || !isAuthReady || hasSeenOnboarding === null) return;
 
-    const inAuthGroup = segments[0] === '(tabs)';
+    const inTabsGroup = segments[0] === '(tabs)';
     const inOnboarding = segments[0] === 'onboarding';
 
     if (!hasSeenOnboarding) {
@@ -65,11 +65,11 @@ export default function RootLayout() {
         router.replace('/onboarding');
       }
     } else if (!user) {
-      if (inAuthGroup) {
-        router.replace('/start');
+      if (inTabsGroup) {
+        router.replace('/(auth)/start');
       }
     } else {
-      if (!inAuthGroup) {
+      if (!inTabsGroup) {
         router.replace('/(tabs)');
       }
     }
@@ -87,9 +87,7 @@ export default function RootLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="onboarding" />
-      <Stack.Screen name="start" />
-      <Stack.Screen name="login" />
-      <Stack.Screen name="signup" />
+      <Stack.Screen name="(auth)" />
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="modal" options={{ presentation: 'modal', headerShown: false }} />
     </Stack>

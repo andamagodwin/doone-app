@@ -11,11 +11,11 @@ import { Surface, Heading, Text, Button } from '~/components/design-system';
 
 export default function StartScreen() {
   const handleLogin = () => {
-    router.push('/login');
+    router.push('/(auth)/login');
   };
 
   const handleCreateAccount = () => {
-    router.push('/signup');
+    router.push('/(auth)/signup');
   };
 
   return (

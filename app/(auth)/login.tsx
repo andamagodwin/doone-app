@@ -95,7 +95,7 @@ export default function LoginScreen() {
             <Text variant="body" className="text-gray-600">
               Don't have an account?
             </Text>
-            <Link onPress={() => router.replace('/signup')} size="md">
+            <Link onPress={() => router.replace('/(auth)/signup')} size="md">
               Sign Up
             </Link>
           </View>

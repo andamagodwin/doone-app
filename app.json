@@ -1,15 +1,18 @@
 {
   "expo": {
-    "name": "doone-app",
-    "slug": "doone-app",
+    "name": "Doone",
+    "slug": "doone",
     "version": "1.0.0",
-    "scheme": "doone-app",
+    "scheme": "doone",
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-router", "expo-web-browser"],
+    "plugins": [
+      "expo-router",
+      "expo-web-browser"
+    ],
     "experiments": {
       "typedRoutes": true,
       "tsconfigPaths": true
@@ -22,14 +25,24 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.andama.doone"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "package": "com.andama.doone"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "81b7cfb2-28ba-4160-9e83-916ce4ce9e0a"
       }
     }
   }

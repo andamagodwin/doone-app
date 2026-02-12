@@ -20,6 +20,9 @@ export interface BottomSheetProps {
   showHandle?: boolean;
   showCloseButton?: boolean;
   enableDrag?: boolean;
+  headerTitle?: string;
+  headerRight?: React.ReactNode;
+  backgroundColor?: string;
   children: React.ReactNode;
 }
 
@@ -32,6 +35,9 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
   showHandle = true,
   showCloseButton = true,
   enableDrag = true,
+  headerTitle,
+  headerRight,
+  backgroundColor,
   children,
 }) => {
   const insets = useSafeAreaInsets();
@@ -185,24 +191,56 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                 {
                   height: currentHeight,
                   paddingBottom: insets.bottom + 20,
+                  backgroundColor: backgroundColor || colors.background.primary,
                   transform: [{ translateY }],
                 },
               ]}>
-              {/* Drag Handle Area */}
+              {/* Drag Handle */}
               {showHandle && (
                 <View style={styles.handleContainer}>
-                  <View style={styles.handle} />
+                  <View
+                    style={[
+                      styles.handle,
+                      backgroundColor && { backgroundColor: 'rgba(255, 255, 255, 0.5)' },
+                    ]}
+                  />
                 </View>
               )}
 
-              {/* Close Button */}
-              {showCloseButton && (
-                <View style={styles.closeButtonContainer}>
-                  <IconButton
-                    icon={<Icon name="close" size={24} color={colors.gray[600]} />}
-                    variant="ghost"
-                    onPress={dismissSheet}
-                  />
+              {/* Header with close button and title */}
+              {(showCloseButton || headerTitle || headerRight) && (
+                <View style={styles.header}>
+                  {showCloseButton && (
+                    <IconButton
+                      icon={
+                        <Icon
+                          name="close"
+                          size={20}
+                          color={backgroundColor ? '#fff' : colors.gray[600]}
+                        />
+                      }
+                      variant="ghost"
+                      onPress={dismissSheet}
+                      size="sm"
+                    />
+                  )}
+                  {!showCloseButton && <View style={{ width: 40 }} />}
+                  {headerTitle && (
+                    <View style={styles.headerTitleContainer}>
+                      <Animated.Text
+                        style={[
+                          styles.headerTitle,
+                          backgroundColor && { color: '#fff' },
+                        ]}>
+                        {headerTitle}
+                      </Animated.Text>
+                    </View>
+                  )}
+                  {headerRight ? (
+                    <View style={styles.headerRight}>{headerRight}</View>
+                  ) : (
+                    <View style={{ width: 40 }} />
+                  )}
                 </View>
               )}
 
@@ -252,11 +290,27 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray[300],
     borderRadius: 2,
   },
-  closeButtonContainer: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    zIndex: 10,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    minHeight: 48,
+  },
+  headerTitleContainer: {
+    flex: 1,
+    alignItems: 'center',
+    marginHorizontal: 12,
+  },
+  headerTitle: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: colors.gray[900],
+    fontFamily: 'Lato-Bold',
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   content: {
     flex: 1,

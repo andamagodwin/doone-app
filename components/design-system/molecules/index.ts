@@ -9,3 +9,4 @@ export * from './TabBarIcon';
 export * from './PaginationDots';
 export * from './AlertBox';
 export * from './SelectableChip';
+export * from './ColorPicker';

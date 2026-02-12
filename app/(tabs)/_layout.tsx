@@ -1,8 +1,15 @@
 import { Tabs } from 'expo-router';
-import { View, Pressable } from 'react-native';
+import { View, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useState } from 'react';
-import { BottomSheet, Heading, Text, colors } from '~/components/design-system';
+import {
+  BottomSheet,
+  InputField,
+  ColorPicker,
+  Text,
+  Button,
+  colors,
+} from '~/components/design-system';
 import HomeBoldIcon from '../../assets/home/icons/home-bold.svg';
 import CalendarBoldIcon from '../../assets/home/icons/calendar-bold.svg';
 import ClockBoldIcon from '../../assets/home/icons/clock-bold.svg';
@@ -12,6 +19,34 @@ import AddIcon from '../../assets/home/icons/add.svg';
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
+
+  // Form state
+  const [taskTitle, setTaskTitle] = useState('');
+  const [selectedColor, setSelectedColor] = useState(colors.primary);
+  const [date, setDate] = useState('Today');
+  const [time, setTime] = useState('All-Day');
+  const [reminder, setReminder] = useState('No reminder');
+  const [tag, setTag] = useState('No tag');
+
+  const handleCreateTask = () => {
+    // Handle task creation
+    console.log('Create task:', {
+      title: taskTitle,
+      color: selectedColor,
+      date,
+      time,
+      reminder,
+      tag,
+    });
+    setIsBottomSheetVisible(false);
+    // Reset form
+    setTaskTitle('');
+    setSelectedColor(colors.primary);
+    setDate('Today');
+    setTime('All-Day');
+    setReminder('No reminder');
+    setTag('No tag');
+  };
 
   return (
     <>
@@ -122,17 +157,107 @@ export default function TabLayout() {
         />
       </Tabs>
 
-      {/* Bottom Sheet Modal using Design System Organism */}
+      {/* Bottom Sheet Modal with Task Form */}
       <BottomSheet
         visible={isBottomSheetVisible}
         onClose={() => setIsBottomSheetVisible(false)}
-        height="95%">
-        <Heading level="h3" className="mb-4">
-          Create New Task
-        </Heading>
-        <Text variant="body" className="text-gray-600">
-          Add your task content here...
-        </Text>
+        height="95%"
+        backgroundColor={selectedColor}
+        headerRight={
+          <Pressable onPress={handleCreateTask}>
+            <Text className="text-white font-lato-bold text-base">Create</Text>
+          </Pressable>
+        }>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 40 }}>
+          {/* Task Title Input */}
+          <View className="mb-6">
+            <InputField
+              placeholder="New Task"
+              value={taskTitle}
+              onChangeText={setTaskTitle}
+              size="lg"
+              autoFocus
+              selectionColor="#000"
+              style={{
+                backgroundColor: 'transparent',
+                borderWidth: 0,
+                textAlign: 'center',
+                color: '#fff',
+                fontSize: 28,
+                fontWeight: '600',
+                minHeight: 60,
+                lineHeight: 34,
+              }}
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"
+            />
+          </View>
+
+          {/* Color Picker */}
+          <View className="mb-6">
+            <Text variant="label" className="mb-3 text-white">
+              Color
+            </Text>
+            <ColorPicker selectedColor={selectedColor} onColorSelect={setSelectedColor} />
+          </View>
+
+          <View className="mb-6 h-px bg-white/30" />
+
+          {/* White Card Container for Form Fields */}
+          <View className="bg-white rounded-2xl overflow-hidden">
+            {/* Date Field */}
+            <View>
+              <Pressable className="flex-row items-center justify-between py-4 px-4">
+                <Text variant="body" className="text-gray-900 font-lato-bold">
+                  Date
+                </Text>
+                <Text variant="body" className="text-gray-500">
+                  {date}
+                </Text>
+              </Pressable>
+              <View className="h-px bg-gray-200 mx-4" />
+            </View>
+
+            {/* Time Field */}
+            <View>
+              <Pressable className="flex-row items-center justify-between py-4 px-4">
+                <Text variant="body" className="text-gray-900 font-lato-bold">
+                  Time
+                </Text>
+                <Text variant="body" className="text-gray-500">
+                  {time}
+                </Text>
+              </Pressable>
+              <View className="h-px bg-gray-200 mx-4" />
+            </View>
+
+            {/* Reminder Field */}
+            <View>
+              <Pressable className="flex-row items-center justify-between py-4 px-4">
+                <Text variant="body" className="text-gray-900 font-lato-bold">
+                  Reminder
+                </Text>
+                <Text variant="body" className="text-gray-500">
+                  {reminder}
+                </Text>
+              </Pressable>
+              <View className="h-px bg-gray-200 mx-4" />
+            </View>
+
+            {/* Tag Field */}
+            <View>
+              <Pressable className="flex-row items-center justify-between py-4 px-4">
+                <Text variant="body" className="text-gray-900 font-lato-bold">
+                  Tag
+                </Text>
+                <Text variant="body" className="text-gray-500">
+                  {tag}
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </ScrollView>
       </BottomSheet>
     </>
   );

@@ -1,9 +1,12 @@
 import '../global.css';
 
-import { Stack } from 'expo-router';
-import { useEffect } from 'react';
-import { Text, TextInput } from 'react-native';
+import { Stack, useRouter, useSegments } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { Text, TextInput, View } from 'react-native';
 import { useFonts } from 'expo-font';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuthStore } from '~/store/authStore';
+import { Spinner } from '~/components/design-system';
 
 export const unstable_settings = {
   // Initial route set to onboarding - will redirect based on storage check
@@ -19,6 +22,12 @@ export default function RootLayout() {
     'Lato-Italic': require('../assets/fonts/Lato-Italic.ttf'),
   });
 
+  const { user, isAuthReady, initialize } = useAuthStore();
+  const segments = useSegments();
+  const router = useRouter();
+  const [hasSeenOnboarding, setHasSeenOnboarding] = useState<boolean | null>(null);
+
+  // Set default font family
   useEffect(() => {
     if (!fontsLoaded) return;
     const T: any = Text as any;
@@ -36,12 +45,49 @@ export default function RootLayout() {
     TI.defaultProps.style = baseInputStyle as any;
   }, [fontsLoaded]);
 
-  if (!fontsLoaded) return null;
+  // Initialize auth + check onboarding status
+  useEffect(() => {
+    initialize();
+    AsyncStorage.getItem('hasSeenOnboarding').then((value) => {
+      setHasSeenOnboarding(value === 'true');
+    });
+  }, []);
+
+  // Navigation guard: redirect based on auth + onboarding state
+  useEffect(() => {
+    if (!fontsLoaded || !isAuthReady || hasSeenOnboarding === null) return;
+
+    const inTabsGroup = segments[0] === '(tabs)';
+    const inOnboarding = segments[0] === 'onboarding';
+
+    if (!hasSeenOnboarding) {
+      if (!inOnboarding) {
+        router.replace('/onboarding');
+      }
+    } else if (!user) {
+      if (inTabsGroup) {
+        router.replace('/(auth)/start');
+      }
+    } else {
+      if (!inTabsGroup) {
+        router.replace('/(tabs)');
+      }
+    }
+  }, [fontsLoaded, isAuthReady, hasSeenOnboarding, user, segments]);
+
+  // Show loading screen while initializing
+  if (!fontsLoaded || !isAuthReady || hasSeenOnboarding === null) {
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+        <Spinner size="lg" />
+      </View>
+    );
+  }
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="onboarding" />
-      <Stack.Screen name="start" />
+      <Stack.Screen name="(auth)" />
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="modal" options={{ presentation: 'modal', headerShown: false }} />
     </Stack>
